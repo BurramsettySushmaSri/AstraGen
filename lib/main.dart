@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'data.dart';
 
 void main() {
@@ -29,8 +30,15 @@ class FirstRoute extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
+class SecondRoute extends StatefulWidget {
   const SecondRoute({Key? key}) : super(key: key);
+
+  @override
+  State<SecondRoute> createState() => _SecondRouteState();
+}
+
+class _SecondRouteState extends State<SecondRoute> {
+  List<WelcomePage> datalist = List<WelcomePage>.empty(growable: true);
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +47,25 @@ class SecondRoute extends StatelessWidget {
         title: const Text('List of Users'),
         backgroundColor: Colors.red,
       ),
-      body: const Center(
-        child: Text('No Data Found'),
-      ),
+      body: (datalist.isEmpty)
+          ? const Center(
+              child: Text('No Data Found'),
+            )
+          : ListView.builder(itemCount: datalist.length, itemBuilder: (context, index) => detailsCard(datalist.elementAt(index))),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff03dac6),
         foregroundColor: Colors.black,
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final data = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ThirdRoute()),
+            MaterialPageRoute(builder: (context) => MyCustomForm()),
           );
+          if (data != null) {
+            WelcomePage wel = data as WelcomePage;
+            print('data:$data');
+            datalist.add(wel);
+            setState(() {});
+          }
         },
         // Respond to button press
 
@@ -57,22 +73,34 @@ class SecondRoute extends StatelessWidget {
       ),
     );
   }
-}
 
-class ThirdRoute extends StatelessWidget {
-  const ThirdRoute({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('New User'),
-        backgroundColor: const Color(0xff03dac6),
-      ),
-      body: MyCustomForm(),
+  Widget detailsCard(WelcomePage data) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(data.name),
+        Text(data.phone),
+        Text(data.dob),
+        Text(data.add),
+      ],
     );
   }
 }
+
+// class ThirdRoute extends StatelessWidget {
+//   const ThirdRoute({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('New User'),
+//         backgroundColor: const Color(0xff03dac6),
+//       ),
+//       body: MyCustomForm(),
+//     );
+//   }
+// }
 
 
 
