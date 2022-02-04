@@ -75,14 +75,18 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   Widget detailsCard(WelcomePage data) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(data.name),
-        Text(data.phone),
-        Text(data.dob),
-        Text(data.add),
-      ],
+    return Center(
+      child: Card(
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          const ListTile(
+            leading: Icon(Icons.album),
+          ),
+          Text(data.name),
+          Text(data.phone),
+          Text(data.dob),
+          Text(data.add),
+        ]),
+      ),
     );
   }
 }
