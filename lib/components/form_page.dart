@@ -31,44 +31,52 @@ class MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: constants.sizeboxheight),
-            TextFormField(
-              controller: _name,
-              decoration: InputDecoration(
-                  hintText: 'Enter your name',
-                  labelText: 'Name',
-                  icon: const Icon(Icons.person),
-                  suffixIcon: IconButton(
-                    onPressed: _name.clear,
-                    icon: const Icon(Icons.clear),
-                  )),
-              validator: (value) {
-                if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value) || value.length < constants.namelen) {
-                  //allow upper and lower case alphabets and space
-                  return "Enter Correct Name";
-                } else {
-                  return null;
-                }
-              },
-            ),
-            TextFormField(
-              controller: _phone,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.phone),
-                hintText: 'Enter a phone number',
-                labelText: 'Phone',
+
+            Card(
+              child: TextFormField(
+                controller: _name,
+                decoration: InputDecoration(
+                    hintText: 'Enter your name',
+                    labelText: 'Name',
+                    icon: const Icon(Icons.person),
+                    suffixIcon: IconButton(
+                      onPressed: _name.clear,
+                      icon: const Icon(Icons.clear),
+                    )),
+                maxLength: 10,
+                validator: (value) {
+                  if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value) || value.length < constants.namelen) {
+                    //allow upper and lower case alphabets and space
+                    return "Enter Correct Name";
+                  } else {
+                    return null;
+                  }
+                },
               ),
-              maxLength: 10,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-              ],
+            ),
+
+            Card(
+              child: TextFormField(
+                controller: _phone,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.phone),
+                  hintText: 'Enter a phone number',
+                  labelText: 'Phone',
+                ),
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                ],
+                validator: (value) {},
+              ),
             ),
             TextFormField(
               controller: _dob,
@@ -126,6 +134,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ],
               ),
             ),
+
             // Padding(
             //     padding: const EdgeInsets.only(left: 150.0, top: 40.0),
             //     child: const ElevatedButton(
