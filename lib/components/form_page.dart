@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:navigation/components/MyHomePage.dart';
 import 'model.dart';
 import 'MyHomePage.dart';
+import 'package:navigation/util/constants.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
@@ -30,11 +31,13 @@ class MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
-      body: Form(
+      body: SingleChildScrollView(
         key: _formKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: constants.sizeboxheight),
             TextFormField(
               controller: _name,
               decoration: InputDecoration(
@@ -46,7 +49,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     icon: const Icon(Icons.clear),
                   )),
               validator: (value) {
-                if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value) || value.length < 3) {
+                if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value) || value.length < constants.namelen) {
                   //allow upper and lower case alphabets and space
                   return "Enter Correct Name";
                 } else {
@@ -81,27 +84,34 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  //check if form data are valid,
-                  // your process task ahed if all data are valid
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                primary: const Color(0xff03dac6), // background
-                onPrimary: Colors.white, // foreground
-              ),
-              child: const Text('validate'),
-            ),
-
             Container(
-              child: Column(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 850.0, top: 40.0),
+                    padding: EdgeInsets.only(left: constants.form_pa_left, top: constants.form_pa_top),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xff03dac6), // background
+                        onPrimary: Colors.white, // foreground
+                      ),
+                      child: const Text('validate'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: constants.form_pa_left, top: constants.form_pa_top),
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.pop(context, WelcomePage(name: _name.text, phone: _phone.text, dob: _dob.text, add: _add.text));

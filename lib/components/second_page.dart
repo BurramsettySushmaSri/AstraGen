@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/components/form_page.dart';
 import 'model.dart';
+import 'package:navigation/util/constants.dart';
 
 class Second_page extends StatefulWidget {
-  const Second_page({ Key? key }) : super(key: key);
+  const Second_page({Key? key}) : super(key: key);
 
   @override
   _second_pageState createState() => _second_pageState();
 }
+
 // ignore: camel_case_types
 class _second_pageState extends State<Second_page> {
   List<WelcomePage> datalist = List<WelcomePage>.empty(growable: true);
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text('List of Users'),
         backgroundColor: Colors.red,
@@ -43,30 +45,39 @@ class _second_pageState extends State<Second_page> {
         child: const Icon(Icons.add),
       ),
     );
-    
   }
 }
 
 Widget detailsCard(WelcomePage data) {
-    return Center(
-      child: Card(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Card(
-            color: Color(0xfffeaf0d),
-            child: Container(
-                height: 80,
-                width: 80,
-                child: Icon(
-                  Icons.reorder,
-                  color: Colors.white,
-                  size: 25,
-                )),
-          ),
-          Text(data.name),
-          Text(data.phone),
-          Text(data.dob),
-          Text(data.add),
-        ]),
-      ),
-    );
-  }
+  return Center(
+    child: Card(
+      elevation: 8,
+      shadowColor: Colors.green,
+      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      margin: EdgeInsets.all(20),
+      child: Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+        Card(
+          elevation: 8,
+          shadowColor: Colors.green,
+          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          margin: EdgeInsets.all(20),
+          color: Color(0xfffeaf0d),
+          child: Container(
+              width: 80,
+              height: 80,
+              child: const Icon(
+                Icons.reorder,
+                color: Colors.white,
+              )),
+        ),
+        Text(data.name),
+        Text('\t'),
+        Text(data.phone),
+        Text('\t'),
+        Text(data.dob),
+        Text('\t'),
+        Text(data.add),
+      ]),
+    ),
+  );
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/components/second_page.dart';
+import 'package:navigation/util/constants.dart';
 
 class First_Page extends StatefulWidget {
   const First_Page({Key? key}) : super(key: key);
@@ -11,9 +12,12 @@ class First_Page extends StatefulWidget {
 class _First_PageState extends State<First_Page> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
+    return Column(
+      children: <Widget>[
+        Image(
+          image: new AssetImage("images/astragen_logo.png"),
+        ),
+        ElevatedButton(
           child: const Text('Start'),
           onPressed: () {
             Navigator.push(
@@ -22,7 +26,7 @@ class _First_PageState extends State<First_Page> {
             );
           },
         ),
-      ),
+      ],
     );
   }
 }
