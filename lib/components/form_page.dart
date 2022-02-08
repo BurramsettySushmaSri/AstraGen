@@ -40,6 +40,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             SizedBox(height: constants.sizeboxheight),
 
             Card(
+              elevation: 8,
               child: TextFormField(
                 controller: _name,
                 decoration: InputDecoration(
@@ -50,9 +51,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                       onPressed: _name.clear,
                       icon: const Icon(Icons.clear),
                     )),
-                maxLength: 10,
                 validator: (value) {
-                  if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value) || value.length < constants.namelen) {
+                  if (value!.isEmpty ||
+                      !RegExp(r'^[a-z A-Z]+$').hasMatch(value) ||
+                      value.length < constants.namelen) {
                     //allow upper and lower case alphabets and space
                     return "Enter Correct Name";
                   } else {
@@ -75,20 +77,61 @@ class MyCustomFormState extends State<MyCustomForm> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                 ],
-                validator: (value) {},
+                validator: (value) {
+                  if (value!.isEmpty || value.length != 10) {
+                    return 'Enter correct phone number';
+                  } else {
+                    return null;
+                  }
+                },
               ),
             ),
-            TextFormField(
-              controller: _dob,
-              decoration: InputDecoration(
-                  hintText: 'Enter your date of birth', labelText: 'Dob', prefixIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.calendar_today))),
+            Card(
+              elevation: 10,
+              child: TextFormField(
+                controller: _dob,
+                decoration: InputDecoration(
+                    hintText: 'Enter your date of birth',
+                    labelText: 'Dob',
+                    prefixIcon: IconButton(
+                        onPressed: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2050));
+                          if (pickedDate != null) {
+                            print(pickedDate);
+                            DateTime formattedDate = pickedDate;
+                            print(formattedDate);
+                            setState(() {
+                              _dob.text =
+                                  "${formattedDate.day}-${formattedDate.month}-${formattedDate.year}";
+                            });
+                          }
+                          validator(value) {
+                            if (value.isEmpty ||
+                                !RegExp(r'^(0[1-9]|1[0-9]|2[0-9]|3[01])-/.-/.$')
+                                    .hasMatch(value)) {
+                              //allow upper and lower case alphabets and space
+                              return 'Enter correct date';
+                            } else {
+                              return null;
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.calendar_today))),
+              ),
             ),
-            TextFormField(
-              controller: _add,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.home),
-                hintText: 'Enter your address',
-                labelText: 'address',
+            Card(
+              elevation: 8,
+              child: TextFormField(
+                controller: _add,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.home),
+                  hintText: 'Enter your address',
+                  labelText: 'address',
+                ),
               ),
             ),
 
@@ -97,43 +140,52 @@ class MyCustomFormState extends State<MyCustomForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: constants.form_pa_left, top: constants.form_pa_top),
+                    padding: EdgeInsets.only(
+                        left: constants.form_pa_left,
+                        top: constants.form_pa_top),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
+                          Navigator.pop(
+                              context,
+                              WelcomePage(
+                                  name: _name.text,
+                                  phone: _phone.text,
+                                  dob: _dob.text,
+                                  add: _add.text));
                         }
+                        _formKey.currentState!.save();
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff03dac6), // background
+                        primary: Color.fromARGB(255, 45, 54, 102), // background
                         onPrimary: Colors.white, // foreground
                       ),
-                      child: const Text('validate'),
+                      child: const Text('Submit'),
                     ),
                   )
                 ],
               ),
             ),
-            Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: constants.form_pa_left, top: constants.form_pa_top),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.pop(context, WelcomePage(name: _name.text, phone: _phone.text, dob: _dob.text, add: _add.text));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff03dac6), // background
-                        onPrimary: Colors.white, // foreground
-                      ),
-                      child: const Text('Submit'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: <Widget>[
+            //       Padding(
+            //         padding: EdgeInsets.only(left: constants.form_pa_left, top: constants.form_pa_top),
+            //         child: ElevatedButton(
+            //           onPressed: () async {
+            //             Navigator.pop(context, WelcomePage(name: _name.text, phone: _phone.text, dob: _dob.text, add: _add.text));
+            //           },
+            //           style: ElevatedButton.styleFrom(
+            //             primary: const Color(0xff03dac6), // background
+            //             onPrimary: Colors.white, // foreground
+            //           ),
+            //           child: const Text('Submit'),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // Padding(
             //     padding: const EdgeInsets.only(left: 150.0, top: 40.0),
