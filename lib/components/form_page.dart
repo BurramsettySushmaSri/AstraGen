@@ -4,9 +4,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:navigation/components/MyHomePage.dart';
 import 'model.dart';
-import 'MyHomePage.dart';
 import 'package:navigation/util/constants.dart';
 
 // Create a Form widget.
@@ -31,7 +29,12 @@ class MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
-      body: Form(
+      appBar: AppBar(
+        title: const Text('Enter User Details'),
+        backgroundColor: Color.fromARGB(255, 45, 54, 102),
+      ),
+      body: SingleChildScrollView(
+        child: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,6 +43,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             SizedBox(height: constants.sizeboxheight),
 
             Card(
+              
               elevation: 8,
               child: TextFormField(
                 controller: _name,
@@ -87,7 +91,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
             ),
             Card(
-              elevation: 10,
+              elevation: 8,
               child: TextFormField(
                 controller: _dob,
                 decoration: InputDecoration(
@@ -101,27 +105,28 @@ class MyCustomFormState extends State<MyCustomForm> {
                               firstDate: DateTime(1900),
                               lastDate: DateTime(2050));
                           if (pickedDate != null) {
-                            print(pickedDate);
+                          
                             DateTime formattedDate = pickedDate;
-                            print(formattedDate);
                             setState(() {
                               _dob.text =
                                   "${formattedDate.day}-${formattedDate.month}-${formattedDate.year}";
                             });
                           }
-                          validator(value) {
-                            if (value.isEmpty ||
-                                !RegExp(r'^(0[1-9]|1[0-9]|2[0-9]|3[01])-/.-/.$')
-                                    .hasMatch(value)) {
+                          
+                        },
+                    
+                        icon: const Icon(Icons.calendar_today))),
+                        validator:(value) {
+                            if (value!.isEmpty  || (!RegExp(r'^[1-9]|2[1-9][-]([1-9]|1[12])[-]\d{4}').hasMatch(value))){
                               //allow upper and lower case alphabets and space
                               return 'Enter correct date';
                             } else {
                               return null;
                             }
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today))),
-              ),
+                       
+                 },
+              
+            ),
             ),
             Card(
               elevation: 8,
@@ -196,6 +201,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           ],
         ),
       ),
+      )
     );
   }
 }

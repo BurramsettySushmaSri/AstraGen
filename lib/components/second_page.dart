@@ -24,7 +24,7 @@ class _second_pageState extends State<Second_page> {
           ? const Center(
               child: Text('No Data Found'),
             )
-          : ListView.builder(itemCount: datalist.length, itemBuilder: (context, index) => detailsCard(datalist.elementAt(index))),
+          : ListView.builder(itemCount: datalist.length, itemBuilder: (context, index) => detailsCard(context,datalist.elementAt(index))),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff03dac6),
         foregroundColor: Colors.black,
@@ -48,14 +48,16 @@ class _second_pageState extends State<Second_page> {
   }
 }
 
-Widget detailsCard(WelcomePage data) {
+Widget detailsCard(BuildContext context,WelcomePage data) {
   return Center(
     child: Card(
       elevation: 8,
-      shadowColor: Colors.green,
-      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      margin: EdgeInsets.all(20),
-      child: Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+          shadowColor: Colors.green,
+          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          margin: EdgeInsets.all(20),
+      child:Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child:Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Card(
           elevation: 8,
           shadowColor: Colors.green,
@@ -63,21 +65,33 @@ Widget detailsCard(WelcomePage data) {
           margin: EdgeInsets.all(20),
           color: Color(0xfffeaf0d),
           child: Container(
-              width: 80,
-              height: 80,
+              width: 50,
+              height: 50,
               child: const Icon(
                 Icons.reorder,
                 color: Colors.white,
-              )),
-        ),
+              ),
+        ),),
+              
+    Container(
+              child:Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+               SizedBox(
+                 height:10,
+               ),
         Text(data.name),
-        Text('\t'),
+
         Text(data.phone),
-        Text('\t'),
+      
         Text(data.dob),
-        Text('\t'),
+      
         Text(data.add),
+               
+              ],
+              ),
+    ),
       ]),
     ),
+    ),
   );
+
 }
