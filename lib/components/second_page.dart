@@ -54,7 +54,7 @@ Widget detailsCard(BuildContext context,WelcomePage data) {
       elevation: 8,
           shadowColor: Colors.green,
           shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
       child:Container(
               width: MediaQuery.of(context).size.width / 2,
               child:Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
