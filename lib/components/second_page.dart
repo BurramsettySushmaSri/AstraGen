@@ -24,7 +24,10 @@ class _second_pageState extends State<Second_page> {
           ? const Center(
               child: Text('No Data Found'),
             )
-          : ListView.builder(itemCount: datalist.length, itemBuilder: (context, index) => detailsCard(context,datalist.elementAt(index))),
+          : ListView.builder(
+              itemCount: datalist.length,
+              itemBuilder: (context, index) =>
+                  detailsCard(context, datalist.elementAt(index))),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff03dac6),
         foregroundColor: Colors.black,
@@ -48,50 +51,95 @@ class _second_pageState extends State<Second_page> {
   }
 }
 
-Widget detailsCard(BuildContext context,WelcomePage data) {
+Widget detailsCard(BuildContext context, WelcomePage data) {
   return Center(
-    child: Card(
-      elevation: 8,
-          shadowColor: Colors.green,
-          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          margin: const EdgeInsets.all(20),
-      child:Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child:Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        Card(
+      child: Card(
+          color: Colors.grey[800],
           elevation: 8,
           shadowColor: Colors.green,
-          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          margin: EdgeInsets.all(20),
-          color: Color(0xfffeaf0d),
+          shape:
+              BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Container(
-              width: 50,
-              height: 50,
-              child: const Icon(
-                Icons.reorder,
-                color: Colors.white,
-              ),
-        ),),
-              
-    Container(
-              child:Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-               SizedBox(
-                 height:10,
-               ),
-        Text(data.name),
-
-        Text(data.phone),
-      
-        Text(data.dob),
-      
-        Text(data.add),
-               
-              ],
-              ),
-    ),
-      ]),
-    ),
-    ),
-  );
-
+              width: MediaQuery.of(context).size.width / 2,
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                      Widget>[
+                Card(
+                  elevation: 8,
+                  shadowColor: Colors.green,
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  margin: EdgeInsets.all(20),
+                  color: Color(0xfffeaf0d),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: const Icon(
+                      Icons.reorder,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(data.name,
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    Text(data.phone,
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    Text(data.dob,
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    Text(data.add,
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ],
+                )
+              ]))));
+//   return Center(
+//     child: Card(
+//       elevation: 8,
+//       color: Colors.grey[800],
+//       shadowColor: Colors.green,
+//       shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
+//       margin: const EdgeInsets.all(20),
+//       child: Container(
+//         width: MediaQuery.of(context).size.width / 2,
+//         child: Row(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: <Widget>[
+//               Card(
+//                 elevation: 8,
+//                 shadowColor: Colors.green,
+//                 shape: BeveledRectangleBorder(
+//                     borderRadius: BorderRadius.circular(15)),
+//                 margin: EdgeInsets.all(20),
+//                 color: Color(0xfffeaf0d),
+//                 child: Container(
+//                   width: 50,
+//                   height: 50,
+//                   child: const Icon(
+//                     Icons.reorder,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//               Container(
+//                 child: Row(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: <Widget>[
+//                     Padding(padding: const EdgeInsets.all(10.0)),
+//                     Text(data.name,
+//                         style: TextStyle(color: Colors.white, fontSize: 18)),
+//                     Text(data.phone,
+//                         style: TextStyle(color: Colors.white, fontSize: 18)),
+//                     Text(data.dob,
+//                         style: TextStyle(color: Colors.white, fontSize: 18)),
+//                     Text(data.add,
+//                         style: TextStyle(color: Colors.white, fontSize: 18)),
+//                   ],
+//                 ),
+//               ),
+//             ]),
+//       ),
+//     ),
+//   );
 }
