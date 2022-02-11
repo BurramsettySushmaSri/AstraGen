@@ -25,6 +25,7 @@ class _First_PageState extends State<First_Page> {
                 fit: BoxFit.fill,
               width : MediaQuery. of(context). size. width ,
     height : MediaQuery. of(context). size. height,
+    
               ),
 
           ),

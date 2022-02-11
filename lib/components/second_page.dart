@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/components/form_page.dart';
 import 'model.dart';
-import 'package:navigation/util/constants.dart';
+
 
 class Second_page extends StatefulWidget {
   const Second_page({Key? key}) : super(key: key);
@@ -15,6 +15,7 @@ class _second_pageState extends State<Second_page> {
   List<WelcomePage> datalist = List<WelcomePage>.empty(growable: true);
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Users'),
@@ -42,6 +43,7 @@ class _second_pageState extends State<Second_page> {
             datalist.add(wel);
             setState(() {});
           }
+        
         },
         // Respond to button press
 
@@ -143,3 +145,5 @@ Widget detailsCard(BuildContext context, WelcomePage data) {
 //     ),
 //   );
 }
+
+
