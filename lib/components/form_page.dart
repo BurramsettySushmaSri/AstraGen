@@ -8,6 +8,9 @@ import 'package:navigation/util/constants.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
+  final WelcomePage? recievedata;
+  const MyCustomForm({Key? key, this.recievedata}) : super(key: key);
+
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -23,6 +26,17 @@ class MyCustomFormState extends State<MyCustomForm> {
   TextEditingController _dob = TextEditingController();
   TextEditingController _phone = TextEditingController();
   TextEditingController _add = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.recievedata != null) {
+      _name = TextEditingController(text: widget.recievedata?.name);
+      _dob = TextEditingController(text: widget.recievedata?.dob);
+      _phone = TextEditingController(text: widget.recievedata?.phone);
+      _add = TextEditingController(text: widget.recievedata?.add);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

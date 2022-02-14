@@ -40,7 +40,7 @@ class _second_pageState extends State<Second_page> {
             print('data:$data');
 
             datalist.add(wel);
-            
+
             setState(() {});
           }
         },
@@ -50,96 +50,95 @@ class _second_pageState extends State<Second_page> {
       ),
     );
   }
-}
 
-Widget detailsCard(BuildContext context, WelcomePage data) {
-  
-  return Center(
-      child: Card(
-          color: Colors.grey[800],
-          elevation: 8,
-          shadowColor: Colors.green,
-          shape:
-              BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Container(
-            padding: const EdgeInsets.only(top: 20.0,bottom:20),
-              width: MediaQuery.of(context).size.width / 2,
-              child:
-             
-                  Column( 
-                    
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget> [
-                        // ignore: unnecessary_new
-                       
-                      // ignore: unnecessary_new
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                       children:[
-                         Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(data.name,
-                        style: const TextStyle(color: Colors.white, fontSize: 18)),
-                    Text(data.phone,
-                        style: const TextStyle(color: Colors.white, fontSize: 18)),
-                    Text(data.dob,
-                        style: const TextStyle(color: Colors.white, fontSize: 18)),
-                    Text(data.add,
-                        style: const TextStyle(color: Colors.white, fontSize: 18)),
-                        // ignore: unnecessary_new
-                        
-                      // ignore: unnecessary_new
-                      
-                  ],
-                ),
-                     Column(
-                       children: [
-                         new IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            
-                          }),
-                           new IconButton(
-                          icon: const Icon(Icons.clear_rounded),
-                          onPressed: () {
-                            
-                          }),
+  Widget detailsCard(BuildContext context, WelcomePage data) {
+    return Center(
+        child: Card(
+            color: Colors.grey[800],
+            elevation: 8,
+            shadowColor: Colors.green,
+            shape:
+                BeveledRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Container(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 20),
+                width: MediaQuery.of(context).size.width / 2,
+                child:
+                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                  // ignore: unnecessary_new
 
-                       ],
-                     ),
-                      
-                    
-                  
-                          // IconButton(padding:const EdgeInsets.symmetric() ,
-                          // icon: const Icon(Icons.clear_all_rounded),
-                          // onPressed: () {
-                            
-                          // }),
-                    
-                  
-                // Card(
-                //   elevation: 8,
-                //   shadowColor: Colors.green,
-                //   shape: BeveledRectangleBorder(
-                //       borderRadius: BorderRadius.circular(15)),
-                //   margin: EdgeInsets.all(20),
-                //   color: Color(0xfffeaf0d),
-                //   child: Container(
-                //     width: 50,
-                //     height: 50,
-                //     child: const Icon(
-                //       Icons.reorder,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
-                
-              
-                
-                
-                
-              ])]))));
+                  // ignore: unnecessary_new
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(data.name,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            Text(data.phone,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            Text(data.dob,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            Text(data.add,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            // ignore: unnecessary_new
+
+                            // ignore: unnecessary_new
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            // ignore: unnecessary_new
+                            new IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () async {
+                                  final getdata = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyCustomForm(
+                                                recievedata: data,
+                                              )));
+                                  if (getdata != null) {
+                                    WelcomePage wel = getdata as WelcomePage;
+                                    datalist.add(wel);
+
+                                    setState(() {});
+                                  }
+                                }),
+                            new IconButton(
+                                icon: const Icon(Icons.clear_rounded),
+                                onPressed: () {}),
+                          ],
+                        ),
+
+                        // IconButton(padding:const EdgeInsets.symmetric() ,
+                        // icon: const Icon(Icons.clear_all_rounded),
+                        // onPressed: () {
+
+                        // }),
+
+                        // Card(
+                        //   elevation: 8,
+                        //   shadowColor: Colors.green,
+                        //   shape: BeveledRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(15)),
+                        //   margin: EdgeInsets.all(20),
+                        //   color: Color(0xfffeaf0d),
+                        //   child: Container(
+                        //     width: 50,
+                        //     height: 50,
+                        //     child: const Icon(
+                        //       Icons.reorder,
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
+                        // ),
+                      ])
+                ]))));
 //   return Center(
 //     child: Card(
 //       elevation: 8,
@@ -188,4 +187,5 @@ Widget detailsCard(BuildContext context, WelcomePage data) {
 //       ),
 //     ),
 //   );
+  }
 }
