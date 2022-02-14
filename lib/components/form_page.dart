@@ -1,8 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, dead_code
 
 import 'dart:core';
-import 'dart:html';
-import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'model.dart';
@@ -21,10 +19,10 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _dob = TextEditingController();
-  final TextEditingController _phone = TextEditingController();
-  final TextEditingController _add = TextEditingController();
+  TextEditingController _name = TextEditingController();
+  TextEditingController _dob = TextEditingController();
+  TextEditingController _phone = TextEditingController();
+  TextEditingController _add = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +78,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                         dob: _dob.text,
                                         add: _add.text));
                               }
+
                               _formKey.currentState!.save();
                             },
                             style: ElevatedButton.styleFrom(
@@ -95,133 +94,126 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ],
                 ))));
   }
-}
 
-Widget nameCard(BuildContext context) {
-  TextEditingController _name = TextEditingController();
-
-  return Card(
-    child: SizedBox(
-      width: widthc(context),
-      child: TextFormField(
-        controller: _name,
-        decoration: InputDecoration(
-            hintText: 'Enter your name',
-            labelText: 'Name',
-            icon: const Icon(Icons.person),
-            suffixIcon: IconButton(
-              onPressed: _name.clear,
-              icon: const Icon(Icons.clear),
-            )),
-        validator: (value) {
-          if (value!.isEmpty ||
-              !RegExp(r'^[a-z A-Z]+$').hasMatch(value) ||
-              value.length < constants.namelen) {
-            //allow upper and lower case alphabets and space
-            return "Enter Correct Name";
-          } else {
-            return null;
-          }
-        },
-      ),
-    ),
-  );
-}
-
-Widget phoneCard(BuildContext context) {
-  final TextEditingController _phone = TextEditingController();
-
-  return Card(
-    child: SizedBox(
-      width: widthc(context),
-      child: TextFormField(
-        controller: _phone,
-        decoration: const InputDecoration(
-          icon: Icon(Icons.phone),
-          hintText: 'Enter a phone number',
-          labelText: 'Phone',
-        ),
-        maxLength: 10,
-        keyboardType: TextInputType.number,
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-        ],
-        validator: (value) {
-          if (value!.isEmpty || value.length != 10) {
-            return 'Enter correct phone number';
-          } else {
-            return null;
-          }
-        },
-      ),
-    ),
-  );
-}
-
-Widget dobCard(BuildContext context) {
-  final TextEditingController _dob = TextEditingController();
-
-  return Card(
-    child: SizedBox(
-      width: widthc(context),
-      child: TextFormField(
-        controller: _dob,
-        decoration: InputDecoration(
-            hintText: 'Enter your date of birth',
-            labelText: 'Dob',
-            prefixIcon: IconButton(
-                onPressed: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2050));
-                  if (pickedDate != null) {
-                    DateTime formattedDate = pickedDate;
-
-                    _dob.text =
-                        "${formattedDate.day}-${formattedDate.month}-${formattedDate.year}";
-                  }
-                },
-                icon: const Icon(Icons.calendar_today))),
-        validator: (value) {
-          if (value!.isEmpty ||
-              (!RegExp(r'^[1-9]|2[1-9][-]([1-9]|1[12])[-]\d{4}')
-                  .hasMatch(value))) {
-            //allow upper and lower case alphabets and space
-            return 'Enter correct date';
-          } else {
-            return null;
-          }
-        },
-      ),
-    ),
-  );
-}
-
-Widget addCard(BuildContext context) {
-  final TextEditingController _add = TextEditingController();
-  return Card(
+  Widget nameCard(BuildContext context) {
+    return Card(
       child: SizedBox(
-    width: widthc(context),
-    child: TextFormField(
-      controller: _add,
-      decoration: const InputDecoration(
-        icon: Icon(Icons.home),
-        hintText: 'Enter your address',
-        labelText: 'address',
+        width: widthc(context),
+        child: TextFormField(
+          controller: _name,
+          decoration: InputDecoration(
+              hintText: 'Enter your name',
+              labelText: 'Name',
+              icon: const Icon(Icons.person),
+              suffixIcon: IconButton(
+                onPressed: _name.clear,
+                icon: const Icon(Icons.clear),
+              )),
+          validator: (value) {
+            if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+              return "Enter Correct Name";
+            } else if (value.length < constants.namelen) {
+              //allow upper and lower case alphabets and space
+              return "Enter atleast three alphabets.";
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
-    ),
-  ));
-}
+    );
+  }
 
-widthc(BuildContext context) {
-  double width = MediaQuery.of(context).size.width;
-  if (width < 600) {
-    width = width;
-    return width;
-  } else {
-    width = width / 3;
-    return width;
+  Widget phoneCard(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        width: widthc(context),
+        child: TextFormField(
+          controller: _phone,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.phone),
+            hintText: 'Enter a phone number',
+            labelText: 'Phone',
+          ),
+          maxLength: constants.maxlenphone,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
+          validator: (value) {
+            if (value!.isEmpty || value.length != 10) {
+              return 'Enter correct phone number';
+            } else {
+              return null;
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget dobCard(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        width: widthc(context),
+        child: TextFormField(
+          controller: _dob,
+          decoration: InputDecoration(
+              hintText: 'Enter your date of birth',
+              labelText: 'Dob',
+              prefixIcon: IconButton(
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2050));
+                    if (pickedDate != null) {
+                      DateTime formattedDate = pickedDate;
+
+                      _dob.text =
+                          "${formattedDate.day}-${formattedDate.month}-${formattedDate.year}";
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_today))),
+          validator: (value) {
+            if (value!.isEmpty ||
+                (!RegExp(r'^[1-9]|2[1-9][-]([1-9]|1[12])[-]\d{4}')
+                    .hasMatch(value))) {
+              //allow upper and lower case alphabets and space
+              return 'Enter correct date';
+            } else {
+              return null;
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget addCard(BuildContext context) {
+    return Card(
+        child: SizedBox(
+      width: widthc(context),
+      child: TextFormField(
+        controller: _add,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.home),
+          hintText: 'Enter your address',
+          labelText: 'address',
+        ),
+      ),
+    ));
+  }
+
+  widthc(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    if (width < 600) {
+      width = width;
+      return width;
+    } else {
+      width = width / 3;
+      return width;
+    }
   }
 }

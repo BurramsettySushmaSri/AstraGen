@@ -19,9 +19,10 @@ class _First_PageState extends State<First_Page> {
     return Stack(
       
         children: <Widget>[
+          // ignore: avoid_unnecessary_containers
           Container( 
             child: Image(
-                image: new AssetImage("images/bg8.png"),
+                image: const AssetImage("images/bg8.png"),
                 fit: BoxFit.fill,
               width : MediaQuery. of(context). size. width ,
     height : MediaQuery. of(context). size. height,
@@ -43,7 +44,7 @@ class _First_PageState extends State<First_Page> {
         
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(255, 179, 171, 171), // background
+                        primary: const Color.fromARGB(255, 179, 171, 171), // background
                         onPrimary: Colors.white, // foreground
                       ),
             onPressed: () {
