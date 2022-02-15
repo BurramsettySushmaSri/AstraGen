@@ -11,7 +11,7 @@ class Second_page extends StatefulWidget {
 
 // ignore: camel_case_types
 class _second_pageState extends State<Second_page> {
-  List<WelcomePage> datalist = List<WelcomePage>.empty(growable: true);
+  List<UserData> datalist = List<UserData>.empty(growable: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class _second_pageState extends State<Second_page> {
             MaterialPageRoute(builder: (context) => MyCustomForm()),
           );
           if (data != null) {
-            WelcomePage wel = data as WelcomePage;
+           UserData wel = data as UserData;
             print('data:$data');
 
             datalist.add(wel);
@@ -51,7 +51,7 @@ class _second_pageState extends State<Second_page> {
     );
   }
 
-  Widget detailsCard(BuildContext context, WelcomePage data) {
+  Widget detailsCard(BuildContext context, UserData data) {
     return Center(
         child: Card(
             color: Colors.grey[800],
@@ -68,9 +68,27 @@ class _second_pageState extends State<Second_page> {
 
                   // ignore: unnecessary_new
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                            Card(
+                               elevation: 8,
+                shadowColor: Colors.green,
+                shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                
+                color: Color(0xfffeaf0d),
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  child: const Icon(
+                    Icons.reorder,
+                    color: Colors.white,
+                  ),
+                ),
+
+                        ),
                         Column(
+                          
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(data.name,
@@ -83,6 +101,9 @@ class _second_pageState extends State<Second_page> {
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 18)),
                             Text(data.add,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                                     Text(data.time,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 18)),
                             // ignore: unnecessary_new
@@ -103,8 +124,9 @@ class _second_pageState extends State<Second_page> {
                                                 recievedata: data,
                                               )));
                                   if (getdata != null) {
-                                    WelcomePage wel = getdata as WelcomePage;
+                                    UserData wel = getdata as UserData;
                                     datalist.add(wel);
+                                    // datalist.insert(value)
 
                                     setState(() {});
                                   }
@@ -121,22 +143,7 @@ class _second_pageState extends State<Second_page> {
 
                         // }),
 
-                        // Card(
-                        //   elevation: 8,
-                        //   shadowColor: Colors.green,
-                        //   shape: BeveledRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(15)),
-                        //   margin: EdgeInsets.all(20),
-                        //   color: Color(0xfffeaf0d),
-                        //   child: Container(
-                        //     width: 50,
-                        //     height: 50,
-                        //     child: const Icon(
-                        //       Icons.reorder,
-                        //       color: Colors.white,
-                        //     ),
-                        //   ),
-                        // ),
+                        
                       ])
                 ]))));
 //   return Center(

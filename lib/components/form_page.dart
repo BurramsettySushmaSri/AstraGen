@@ -8,7 +8,7 @@ import 'package:navigation/util/constants.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
-  final WelcomePage? recievedata;
+  final UserData? recievedata;
   const MyCustomForm({Key? key, this.recievedata}) : super(key: key);
 
   @override
@@ -22,10 +22,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
+  final scaffoldKey=GlobalKey<ScaffoldState>();
+ 
   TextEditingController _name = TextEditingController();
   TextEditingController _dob = TextEditingController();
   TextEditingController _phone = TextEditingController();
   TextEditingController _add = TextEditingController();
+  TextEditingController _time = TextEditingController();
+
 
   @override
   void initState() {
@@ -34,6 +38,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       _dob = TextEditingController(text: widget.recievedata?.dob);
       _phone = TextEditingController(text: widget.recievedata?.phone);
       _add = TextEditingController(text: widget.recievedata?.add);
+      _time=TextEditingController(text: widget.recievedata?.time);
     }
     super.initState();
   }
@@ -41,6 +46,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
         appBar: AppBar(
           title: const Text('Enter User Details'),
           backgroundColor: Color.fromARGB(255, 45, 54, 102),
@@ -48,9 +54,10 @@ class MyCustomFormState extends State<MyCustomForm> {
         body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
+                
                 child: Column(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       height: constants.sizeboxheight,
                     ),
                     (MediaQuery.of(context).size.width < 600)
@@ -59,6 +66,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                             phoneCard(context),
                             dobCard(context),
                             addCard(context),
+                            timeCard(context),
                           ])
                         : Column(children: [
                             Row(
@@ -72,7 +80,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 children: [
                                   dobCard(context),
                                   addCard(context),
-                                ])
+                                ]),
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  timeCard(context),
+                                  
+                                ]),
                           ]),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -86,12 +100,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                               if (_formKey.currentState!.validate()) {
                                 Navigator.pop(
                                     context,
-                                    WelcomePage(
+                                    UserData(
                                         name: _name.text,
                                         phone: _phone.text,
                                         dob: _dob.text,
-                                        add: _add.text));
+                                        add: _add.text,time:_time.text));
                               }
+                              // else {
+                              //           ScaffoldMessenger.of(context)
+                              //               .showSnackBar(SnackBar(
+                              //             content: Text('error'),
+                              //             backgroundColor: Colors.red,
+                              //           ));
+                              //         }
 
                               _formKey.currentState!.save();
                             },
@@ -115,9 +136,11 @@ class MyCustomFormState extends State<MyCustomForm> {
         width: widthc(context),
         child: TextFormField(
           controller: _name,
+          autovalidateMode:AutovalidateMode.onUserInteraction ,
           decoration: InputDecoration(
               hintText: 'Enter your name',
               labelText: 'Name',
+    
               icon: const Icon(Icons.person),
               suffixIcon: IconButton(
                 onPressed: _name.clear,
@@ -125,7 +148,8 @@ class MyCustomFormState extends State<MyCustomForm> {
               )),
           validator: (value) {
             if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-              return "Enter Correct Name";
+               return "Enter correct name ";
+             
             } else if (value.length < constants.namelen) {
               //allow upper and lower case alphabets and space
               return "Enter atleast three alphabets.";
@@ -144,6 +168,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         width: widthc(context),
         child: TextFormField(
           controller: _phone,
+          autovalidateMode:AutovalidateMode.disabled,
           decoration: const InputDecoration(
             icon: Icon(Icons.phone),
             hintText: 'Enter a phone number',
@@ -156,10 +181,11 @@ class MyCustomFormState extends State<MyCustomForm> {
           ],
           validator: (value) {
             if (value!.isEmpty || value.length != 10) {
-              return 'Enter correct phone number';
-            } else {
-              return null;
-            }
+              Future.delayed(Duration.zero,(){
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Enter correct phone number"))).closed
+            .then((reason){});
+            }); return '';}
+            return null;
           },
         ),
       ),
@@ -172,24 +198,30 @@ class MyCustomFormState extends State<MyCustomForm> {
         width: widthc(context),
         child: TextFormField(
           controller: _dob,
-          decoration: InputDecoration(
+          autovalidateMode:AutovalidateMode.onUserInteraction,
+          decoration: const InputDecoration(
               hintText: 'Enter your date of birth',
               labelText: 'Dob',
-              prefixIcon: IconButton(
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
+              icon:Icon(Icons.calendar_today_sharp))
+              ,
+                  onTap: () async {
+                   DateTime? pickedDate = DateTime(1900); 
+                   FocusScope.of(context).requestFocus(new FocusNode());
+                    pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2050));
+                        
                     if (pickedDate != null) {
                       DateTime formattedDate = pickedDate;
 
                       _dob.text =
                           "${formattedDate.day}-${formattedDate.month}-${formattedDate.year}";
                     }
+      
                   },
-                  icon: const Icon(Icons.calendar_today))),
+                  
           validator: (value) {
             if (value!.isEmpty ||
                 (!RegExp(r'^[1-9]|2[1-9][-]([1-9]|1[12])[-]\d{4}')
@@ -204,6 +236,41 @@ class MyCustomFormState extends State<MyCustomForm> {
       ),
     );
   }
+  Widget timeCard(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        width: widthc(context),
+        child: TextFormField(
+          controller: _time,
+          autovalidateMode:AutovalidateMode.onUserInteraction,
+          decoration: const InputDecoration(
+              hintText: 'Choose Time',
+              labelText: 'Time',
+              icon:Icon(Icons.timelapse_rounded)),
+              
+                  onTap: () async { 
+                   FocusScope.of(context).requestFocus(new FocusNode());
+                    final TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime:TimeOfDay.now(),
+        initialEntryMode: TimePickerEntryMode.dial,
+      );
+      TimeOfDay selectedTime = TimeOfDay.now();
+                        
+                    if(timeOfDay != null && timeOfDay != selectedTime)
+        {
+          
+         
+            selectedTime = timeOfDay;
+            _time.text=("${selectedTime.hour}:${selectedTime.minute}");
+          
+        }
+                  }
+        )
+      )          
+         
+    );
+  }
 
   Widget addCard(BuildContext context) {
     return Card(
@@ -211,6 +278,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       width: widthc(context),
       child: TextFormField(
         controller: _add,
+        autovalidateMode:AutovalidateMode.onUserInteraction ,
         decoration: const InputDecoration(
           icon: Icon(Icons.home),
           hintText: 'Enter your address',
@@ -230,4 +298,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       return width;
     }
   }
+
+
+
 }
