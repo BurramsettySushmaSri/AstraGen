@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'model.dart';
 import 'package:navigation/util/constants.dart';
-import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/rendering.dart';
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
@@ -28,6 +26,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+ String _selectedGender = 'male';
   TextEditingController _name = TextEditingController();
   TextEditingController _dob = TextEditingController();
   TextEditingController _phone = TextEditingController();
@@ -42,6 +41,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       _phone = TextEditingController(text: widget.recievedata?.phone);
       _add = TextEditingController(text: widget.recievedata?.add);
       _time = TextEditingController(text: widget.recievedata?.time);
+      _selectedGender=widget.recievedata?.gender??'male';
     }
     super.initState();
   }
@@ -63,14 +63,20 @@ class MyCustomFormState extends State<MyCustomForm> {
                       height: constants.sizeboxheight,
                     ),
                     (MediaQuery.of(context).size.width < 600)
-                        ? Column(children: [
+                        ? Column(children:  [
                             nameCard(context),
                             phoneCard(context),
                             dobCard(context),
                             addCard(context),
                             timeCard(context),
                             RadioB(context),
-                          ])
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: 
+                                  techChips(),
+                                ),
+                            
+                          ],)
                         : Column(children: [
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -90,6 +96,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   timeCard(context),
                                   RadioB(context),
                                 ]),
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: 
+                                  techChips(),
+                                ),
                           ]),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -108,15 +119,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                         phone: _phone.text,
                                         dob: _dob.text,
                                         add: _add.text,
-                                        time: _time.text));
+                                         time: _time.text,gender: _selectedGender));
                               }
-                              // else {
-                              //           ScaffoldMessenger.of(context)
-                              //               .showSnackBar(SnackBar(
-                              //             content: Text('error'),
-                              //             backgroundColor: Colors.red,
-                              //           ));
-                              //         }
 
                               _formKey.currentState!.save();
                             },
@@ -170,7 +174,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         width: widthc(context),
         child: TextFormField(
           controller: _phone,
-          autovalidateMode: AutovalidateMode.disabled,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
             icon: Icon(Icons.phone),
             hintText: 'Enter a phone number',
@@ -274,33 +278,50 @@ class MyCustomFormState extends State<MyCustomForm> {
         child: SizedBox(
       width: widthc(context),
       child: TextFormField(
-        controller: _add,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: const InputDecoration(
-          icon: Icon(Icons.home),
-          hintText: 'Enter your address',
-          labelText: 'address',
-        ),
-      ),
+          controller: _add,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.home),
+            hintText: 'Enter your address',
+            labelText: 'address',
+          ),
+          validator: (value) {
+            if (value!.isEmpty) {
+              Future.delayed(Duration.zero, (){
+              _showDialog(context);});
+              return '';
+            }
+            return null;
+          }),
     ));
   }
 
   Widget RadioB(BuildContext context) {
     return Card(
       child: SizedBox(
-        height: 50.9,
+         height: 57.0,
         width: widthc(context),
-        child: CustomRadioButton(
-          height: 50.9,
+        child: Column(children: [
+          (MediaQuery.of(context).size.width < 600)?
+          Row(children:[const Text('Choose your gender:'),Radio(context)]
+          ,):Column(children:[const Text('Choose your gender:'),Radio(context)]),] ))
+    );
+  }
+Widget Radio(BuildContext context)
+{
+  return
+        CustomRadioButton(
+           height: 34.2,
+          width:60.0,
           elevation: 0,
           absoluteZeroSpacing: false,
           unSelectedColor: Theme.of(context).canvasColor,
-          buttonLables: [
+          buttonLables: const [
             'Male',
             'Female',
             'Others',
           ],
-          buttonValues: [
+          buttonValues:const [
             "MALE",
             "FEMALE",
             "OTHERS",
@@ -308,15 +329,61 @@ class MyCustomFormState extends State<MyCustomForm> {
           buttonTextStyle: ButtonTextStyle(
               selectedColor: Colors.white,
               unSelectedColor: Colors.black,
-              textStyle: TextStyle(fontSize: 16)),
+              textStyle: TextStyle(fontSize: 13)),
           radioButtonValue: (value) {
-            print(value);
+             _selectedGender = value as String;
+             print(_selectedGender);
           },
           selectedColor: Color.fromARGB(255, 45, 54, 102),
+        );
+}    
+
+  List<Tech> _chipsList = [
+    Tech("Android", Colors.green, false),
+    Tech("Flutter", Colors.blueGrey, false),
+    Tech("Ios", Colors.deepOrange, false),
+    Tech("Python", Colors.cyan, false),
+    Tech("Go lang", Colors.yellow, false)
+  ];
+  List<Widget> techChips () {
+    List<Widget> chips = [];
+    for (int i=0; i< _chipsList.length; i++) {
+      Widget item = Padding(
+        padding: const EdgeInsets.only(left:10, right: 5),
+        child: FilterChip(
+          label: Text(_chipsList[i].label),
+          labelStyle: TextStyle(color: Colors.white),
+          backgroundColor: _chipsList[i].color,
+          selected: _chipsList[i].isSelected,
+          onSelected: (bool value)
+          {
+            setState(() {
+              _chipsList[i].isSelected = value;
+            });
+          },
         ),
-      ),
-    );
+      );
+      chips.add(item);
+    }
+    return chips;
   }
+
+//  Widget chips(BuildContext context){
+//    return Chip(
+//             elevation: 20,
+//             padding: EdgeInsets.all(8),
+//             backgroundColor: Colors.greenAccent[100],
+//             shadowColor: Colors.black,
+//             avatar: CircleAvatar(
+//               backgroundImage: NetworkImage(
+//                   "https://pbs.twimg.com/profile_images/1304985167476523008/QNHrwL2q_400x400.jpg"), //NetwordImage
+//             ), //CircleAvatar
+//             label: Text(
+//               'GeeksforGeeks',
+//               style: TextStyle(fontSize: 20),
+//             ), //Text
+//           );//Chip
+//  }
 
   widthc(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -328,4 +395,30 @@ class MyCustomFormState extends State<MyCustomForm> {
       return width;
     }
   }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("**Warning**", textAlign: TextAlign.center),
+          content: const Text("Confirm your address before submit!"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK",style: TextStyle(color: Colors.black),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          elevation: 10,
+          backgroundColor: Colors.red,
+        );
+      },
+    );
+  
 }
+}
+
+
+

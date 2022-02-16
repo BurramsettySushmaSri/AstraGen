@@ -106,6 +106,9 @@ class _second_pageState extends State<Second_page> {
                                      Text(data.time,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 18)),
+                                    Text(data.gender,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
                             // ignore: unnecessary_new
 
                             // ignore: unnecessary_new
